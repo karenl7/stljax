@@ -9,18 +9,22 @@ import statistics
 import pickle
 import sys
 
+from matplotlib import rc
+rc('font',**{'family':'serif','serif':['Palatino']})
+rc('text', usetex=True)
+
 if __name__ == "__main__":
 
     args = sys.argv[1:]
-    filename = args[0]
+    bs = int(args[0])
     max_T = int(args[1])
+    device = str(args[2])
+    filename = "../results/timing_test_jax_bs_%i_maxT_%i_%s"%(bs, max_T, device)
 
-
-    axis = 0
-    pred_rev = Predicate('x', lambda x: x)
-    interval = [2, 5]
-    mask = Always(pred_rev > 4, interval=interval)
-    recurrent = AlwaysRecurrent(pred_rev > 4, interval=interval)
+    pred = Predicate('x', lambda x: x)
+    interval = None
+    mask = Always(pred > 4, interval=interval)
+    recurrent = AlwaysRecurrent(pred > 4, interval=interval)
 
 
 
@@ -53,20 +57,15 @@ if __name__ == "__main__":
     # Number of runs
     runs = 25
     T = 2
-
-    bs = 256
-    means = []
-    stds = []
     data = {}
-
-    functions = ["mask_", "recurrent_", "grad_mask", "grad_recurrent", "mask_jit", "recurrent_jit", "grad_mask_jit", "grad_recurrent_jit"]
-    # functions = ["mask_jit", "recurrent_jit", "grad_mask_jit", "grad_recurrent_jit"]
-    # functions = ["mask_jit", "grad_mask_jit"]
-
     Ts = []
+    functions = ["mask_", "recurrent_", "grad_mask", "grad_recurrent", "mask_jit", "recurrent_jit", "grad_mask_jit", "grad_recurrent_jit"]
+
+
     data["functions"] = functions
     data["runs"] = runs
     data["loops"] = loops
+
     while T <= max_T:
         Ts.append(T)
         data['Ts'] = Ts
@@ -74,7 +73,6 @@ if __name__ == "__main__":
         signal = jnp.array(np.random.random([bs, T]))
         times_list = []
         data[str(T)] = {}
-
         for f in functions:
             print("timing ", f)
             timeit.repeat(f + "(signal)", globals=globals(), repeat=1, number=1)
@@ -88,26 +86,34 @@ if __name__ == "__main__":
         T *= 2
 
 
-    # means = []
-    # stds = []
-    # for k in loaded_dict.keys():
-    #     if k in ["Ts", "functions"]:
-    #         break
-    #     mus = []
-    #     sts = []
-    #     for f in loaded_dict[k].keys():
-    #         mus.append(statistics.mean(loaded_dict[k][f])/loaded_dict["loops"])
-    #         sts.append(statistics.stdev(loaded_dict[k][f])/loaded_dict["loops"])
+    means = []
+    stds = []
+    for k in data.keys():
+        if k in ["Ts", "functions", "loops", "runs"]:
+            continue
+        mus = []
+        sts = []
+        for f in data[k].keys():
+            mus.append(statistics.mean(data[k][f])/data["loops"])
+            sts.append(statistics.stdev(data[k][f])/data["loops"])
 
-    #     means.append(mus)
-    #     stds.append(sts)
-    # means = np.array(means)
-    # stds = np.array(stds)
+        means.append(mus)
+        stds.append(sts)
+    means = np.array(means)
+    stds = np.array(stds)
 
-    # plt.plot(loaded_dict["Ts"], means * 1E3)
-    # plt.yscale("log")
-    # plt.legend(loaded_dict["functions"])
-    # plt.grid()
-    # plt.xlabel("signal length")
-    # plt.ylabel("computation time [ms]")
+    fontsize = 14
 
+    plt.figure(figsize=(10,5))
+    plt.plot(data["Ts"], means * 1E3)
+    for (m,s) in zip(means.T, stds.T):
+        plt.fill_between(data["Ts"], (m - s) * 1E3, (m + s) * 1E3, alpha=0.3)
+    plt.yscale("log")
+    plt.legend(functions, fontsize=fontsize-2)
+    plt.grid()
+    plt.xlabel("Signal length", fontsize=fontsize)
+    plt.ylabel("Computation time [ms]", fontsize=fontsize)
+    plt.title("JAX " + str(device), fontsize=fontsize+2)
+    plt.tight_layout()
+
+    plt.savefig(filename + ".png", dpi=200, transparent=True)
