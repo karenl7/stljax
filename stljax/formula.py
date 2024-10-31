@@ -784,7 +784,7 @@ class UntilRecurrent(STL_Formula):
             trace2 = self.subformula2(signal, **kwargs)
             n_time_steps = signal.shape[time_dim] # TODO: WIP
 
-        Alw = Always(subformula=Identity(name=str(self.subformula1)))
+        Alw = AlwaysRecurrent(subformula=Identity(name=str(self.subformula1)))
         LHS = jnp.permute_dims(jnp.repeat(jnp.expand_dims(trace2, -1), n_time_steps, axis=-1), [1,0])  # [sub_signal, t_prime]
         RHS = jnp.ones_like(LHS) * -LARGE_NUMBER  # [sub_signal, t_prime]
 
@@ -1108,7 +1108,7 @@ class Until(STL_Formula):
         self._interval = [0, jnp.inf] if self.interval is None else self.interval
 
 
-    def robustness_trace(self, signal, padding="last", large_number=1E9, **kwargs):
+    def robustness_trace(self, signal, padding=None, large_number=1E9, **kwargs):
         time_dim = 0  # assuming signal is [time_dim,...]
         if isinstance(signal, tuple):
             signal1, signal2 = signal
@@ -1137,8 +1137,8 @@ class Until(STL_Formula):
             signal1_pad = jnp.ones([interval[1]+1, T]) * signal1.mean(time_dim)
             signal2_pad = jnp.ones([interval[1]+1, T]) * signal2.mean(time_dim)
         else:
-            signal1_pad = jnp.ones([interval[1]+1, T]) * mask_value
-            signal2_pad = jnp.ones([interval[1]+1, T]) * mask_value
+            signal1_pad = jnp.ones([interval[1]+1, T]) * -mask_value
+            signal2_pad = jnp.ones([interval[1]+1, T]) * -mask_value
 
         signal1_padded = jnp.concatenate([signal1_matrix, signal1_pad], axis=time_dim)
         signal2_padded = jnp.concatenate([signal2_matrix, signal2_pad], axis=time_dim)
@@ -1166,7 +1166,7 @@ class DifferentiableAlways(STL_Formula):
         self.subformula = subformula
         self._interval = [0, jnp.inf] if self.interval is None else self.interval
 
-    def robustness_trace(self, signal, t_start, t_end, scale=1.0, padding="last", large_number=1E9, delta=1E-3, **kwargs):
+    def robustness_trace(self, signal, t_start, t_end, scale=1.0, padding=None, large_number=1E9, delta=1E-3, **kwargs):
         time_dim = 0  # assuming signal is [time_dim,...]
         signal = self.subformula(signal, padding=padding, large_number=large_number, **kwargs)
         T = signal.shape[time_dim]
@@ -1208,7 +1208,7 @@ class DifferentiableEventually(STL_Formula):
         self.subformula = subformula
         self._interval = [0, jnp.inf] if self.interval is None else self.interval
 
-    def robustness_trace(self, signal, t_start, t_end, scale=1.0, padding="last", large_number=1E9, delta=1E-3, **kwargs):
+    def robustness_trace(self, signal, t_start, t_end, scale=1.0, padding=None, large_number=1E9, delta=1E-3, **kwargs):
         time_dim = 0  # assuming signal is [time_dim,...]
         signal = self.subformula(signal, padding=padding, large_number=large_number, **kwargs)
         T = signal.shape[time_dim]
