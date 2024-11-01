@@ -791,7 +791,7 @@ class UntilRecurrent(STL_Formula):
         # Case 1, interval = [0, inf]
         if self.interval == None:
             for i in range(n_time_steps):
-                RHS = RHS.at[i:,i].set(Alw(trace1[i:]))
+                RHS = RHS.at[i:,i].set(Alw(trace1[i:], **kwargs))
 
         # Case 2 and 4: self.interval is [a, b], a ≥ 0, b < ∞
         elif self.interval[1] < jnp.inf:
@@ -799,13 +799,13 @@ class UntilRecurrent(STL_Formula):
             b = self.interval[1]
             for i in range(n_time_steps):
                 end = i+b+1
-                RHS = RHS.at[i+a:end,i].set(Alw(trace1[i:end])[a:])
+                RHS = RHS.at[i+a:end,i].set(Alw(trace1[i:end], **kwargs)[a:])
 
         # Case 3: self.interval is [a, np.inf), a ≂̸ 0
         else:
             a = self.interval[0]
             for i in range(n_time_steps):
-                RHS = RHS.at[i+a:,i].set(Alw(trace1[i:])[a:])
+                RHS = RHS.at[i+a:,i].set(Alw(trace1[i:], **kwargs)[a:])
 
         return maxish(minish(jnp.stack([LHS, RHS], axis=-1), axis=-1, keepdims=False, **kwargs), axis=-1, keepdims=False, **kwargs)
 
@@ -1148,7 +1148,7 @@ class Until(STL_Formula):
         phi2_mask = jnp.stack([jnp.triu(jnp.ones([T + interval[1]+1,T]), -end_idx) * jnp.tril(jnp.ones([T + interval[1]+1,T]), -end_idx) for end_idx in range(interval[0], interval[-1]+1)], 0)
         phi1_masked_signal = jnp.stack([jnp.where(m1, signal1_padded, mask_value) for m1 in phi1_mask], 0)
         phi2_masked_signal = jnp.stack([jnp.where(m2, signal2_padded, mask_value) for m2 in phi2_mask], 0)
-        return maxish(jnp.stack([minish(jnp.stack([minish(s1, axis=0, keepdims=False), minish(s2, axis=0, keepdims=False)], axis=0), axis=0, keepdims=False, **kwargs) for (s1, s2) in zip(phi1_masked_signal, phi2_masked_signal)], axis=0), axis=0, keepdims=False, **kwargs)
+        return maxish(jnp.stack([minish(jnp.stack([minish(s1, axis=0, keepdims=False, **kwargs), minish(s2, axis=0, keepdims=False, **kwargs)], axis=0), axis=0, keepdims=False, **kwargs) for (s1, s2) in zip(phi1_masked_signal, phi2_masked_signal)], axis=0), axis=0, keepdims=False, **kwargs)
 
     def _next_function(self):
         """ next function is the input subformula. For visualization purposes """
