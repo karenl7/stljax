@@ -1025,7 +1025,7 @@ class Eventually(STL_Formula):
         self.subformula = subformula
         self._interval = [0, jnp.inf] if self.interval is None else self.interval
 
-    def robustness_trace(self, signal, padding="last", large_number=1E9, **kwargs):
+    def robustness_trace(self, signal, padding=None, large_number=1E9, **kwargs):
         time_dim = 0  # assuming signal is [time_dim,...]
         signal = self.subformula(signal, time_dim=time_dim, padding=padding, large_number=large_number, **kwargs)
         T = signal.shape[time_dim]
@@ -1066,7 +1066,7 @@ class Always(STL_Formula):
         self.subformula = subformula
         self._interval = [0, jnp.inf] if self.interval is None else self.interval
 
-    def robustness_trace(self, signal, padding="last", large_number=1E9, **kwargs):
+    def robustness_trace(self, signal, padding=None, large_number=1E9, **kwargs):
         time_dim = 0  # assuming signal is [time_dim,...]
         signal = self.subformula(signal, padding=padding, large_number=large_number, **kwargs)
         T = signal.shape[time_dim]
