@@ -598,7 +598,8 @@ class UntilRecurrent(STL_Formula):
         if overlap == False:
             self.subformula2 = Eventually(subformula=subformula2, interval=[0,1])
         self.LARGE_NUMBER = 1E9
-        self.Alw = AlwaysRecurrent(subformula=Identity(name=str(self.subformula1)))
+        # self.Alw = AlwaysRecurrent(subformula=Identity(name=str(self.subformula1))
+        self.Alw = AlwaysRecurrent(Predicate('x', lambda x: x) > 0.)
 
         if self.interval is None:
             self.hidden_dim = None
@@ -655,23 +656,17 @@ class UntilRecurrent(STL_Formula):
     def _cell(self, state, hidden, **kwargs):
         x1, x2 = state
         h1, h2 = hidden
-        h1_shift = self.M @ h1 + self.b * x1
-        h1_new = jnp.flip(self.Alw(jnp.flip(h1_shift), **kwargs))
-        # h1_new = minish(jnp.stack([self.M @ h1 + self.b * x1,
-        #                            x1 * self.ones_array]),
-        #                 axis=0, keepdims=False, **kwargs)
+        h1_new = self.M @ h1 + self.b * x1
+        h1_min = jnp.flip(self.Alw(jnp.flip(h1_new), **kwargs))
         h2_new = self.M @ h2 + self.b * x2
         start_idx, end_idx = self._get_interval_indices()
-        z = minish(jnp.stack([h1_new, h2_new]), axis=0, keepdims=False, **kwargs)[start_idx:end_idx]
-
+        z = minish(jnp.stack([h1_min, h2_new]), axis=0, keepdims=False, **kwargs)[start_idx:end_idx]
 
         def g_(carry, x):
             carry = maxish(jnp.array([carry, x]), axis=0, keepdims=False, **kwargs)
             return carry, carry
 
-        # output, _ = scan(g_,  -self.LARGE_NUMBER, z)
-        # output = maxish(z[start_idx:end_idx], axis=0, keepdims=False, **kwargs)
-        output, _ = jax.lax.scan(g_,  -self.LARGE_NUMBER, z[start_idx:end_idx])
+        output, _ = jax.lax.scan(g_,  -self.LARGE_NUMBER, z)
 
         return output, (h1_new, h2_new)
 
@@ -694,11 +689,9 @@ class UntilRecurrent(STL_Formula):
             o, hidden = self._cell(state, hidden, **kwargs)
             return hidden, o
 
-
-
-
         _, outputs_stack = jax.lax.scan(f_, hidden_state, jnp.stack([trace1, trace2], axis=1))
         return outputs_stack
+
 
     def robustness(self, signal, **kwargs):
         """
