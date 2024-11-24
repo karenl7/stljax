@@ -8,17 +8,11 @@ A toolbox to compute the robustness of STL formulas using computation graphs. Th
 
 Requires Python 3.10+
 
-Clone the repo. 
+Install the repo:
 
- Make a venv and activate it
-
-`python3 -m venv stljax_venv`
-
-`source stljax_venv/bin/activate`
-
-Go into the `stljax` folder. Then to install:
-
-`pip install -e .`
+```
+pip install git+https://github.com/UW-CTRL/stljax.git
+```
 
 
 ## Usage
