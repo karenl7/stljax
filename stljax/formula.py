@@ -1082,10 +1082,6 @@ class DifferentiableEventually(STL_Formula):
         signal = self.subformula(signal, padding=padding, large_number=large_number, **kwargs)
         T = signal.shape[time_dim]
         mask_value = -large_number
-        if self.interval is None:
-            interval = [0,T-1]
-        else:
-            interval = self.interval
         signal_matrix = signal.reshape([T,1]) @ jnp.ones([1,T])
         if padding == "last":
             pad_value = signal[-1]
@@ -1093,7 +1089,7 @@ class DifferentiableEventually(STL_Formula):
             pad_value = signal.mean(time_dim)
         else:
             pad_value = mask_value
-        signal_pad = jnp.ones([interval[1]+1, T]) * pad_value
+        signal_pad = jnp.ones([T, T]) * pad_value
         signal_padded = jnp.concatenate([signal_matrix, signal_pad], axis=time_dim)
         smooth_time_mask = smooth_mask(T, t_start, t_end, scale)
         padded_smooth_time_mask = jnp.zeros([2 * T, T])
@@ -1108,4 +1104,4 @@ class DifferentiableEventually(STL_Formula):
         return [self.subformula]
 
     def __str__(self):
-        return "♢ " + str(self._interval) + "( " + str(self.subformula) + " )"
+        return "♢ [a,b] ( " + str(self.subformula) + " )"
