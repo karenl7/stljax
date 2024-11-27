@@ -8,17 +8,20 @@ A toolbox to compute the robustness of STL formulas using computation graphs. Th
 
 Requires Python 3.10+
 
-Clone the repo. 
+Install the repo:
 
- Make a venv and activate it
+```
+pip install git+https://github.com/UW-CTRL/stljax.git
+```
 
-`python3 -m venv stljax_venv`
+Alternatively, if you like to install the package in editable mode,
 
-`source stljax_venv/bin/activate`
-
-Go into the `stljax` folder. Then to install:
-
-`pip install -e .`
+```
+git clone https://github.com/UW-CTRL/stljax.git
+cd stljax
+pip install -e .
+```
+(Best to use a virtual environment.)
 
 
 ## Usage
@@ -26,7 +29,6 @@ Go into the `stljax` folder. Then to install:
 * Setting up signals for the formulas, including the use of Expressions and Predicates
 * Defining STL formulas and visualizing them
 * Evaluating STL robustness, and robustness trace
-* Gradient descent on STL parameters and signal parameters.
 
 
 ## (New) Features
@@ -35,13 +37,13 @@ stljax leverages to benefits of jax and automatic differentiation!
 Aside from using jax as the backend, stljax is more recent and tidier implementation of stlcg which was originally implemented in PyTorch back ~2019.
 
 - Removed the `distributed_mean` hack from original stlcg implementation. jax keeps track of multiple max/min values and will distribute the gradients across all max/min values!
-- Incorporation of the smooth max/min presented in [Optimization with Temporal and Logical Specifications via Generalized Mean-based Smooth Robustness Measures](https://arxiv.org/abs/2405.10996) by Samet Uzun, Purnanand Elango, Pierre-Loic Garoche, Behcet Acikmese
-    - Use `approx_method="gmsr"` and `temperature=(eps, p)`
+
 
 ## Tags
 
 | Tags  🏷️  | Description |
 | --------- | ----------- |
+| v.1.1.0   | General code improvements. Included recurrent implementation and example notebooks. |
 | v.1.0.0   | Removed awkward expected signal dimension & leverage vmap for batched inputs. Masking for temporal operations & remove need to reverse signals. |
 | v0.0.0    | A transfer from the 2019 PyTorch implementation to Jax + some tidying + adding Predicates + reversing signal automatically. |
 
@@ -107,11 +109,12 @@ We can use `jax.vmap` to handle multiple signals at once.
 `jax.vmap(formula)(signals)   # signals is shape [bs, time_dim,...]`
 
 
-
 NOTE: Need to take care for formulas defined with Expressions and need multiple inputs. Need a wrapper since `jax.vmap` doesn't like tuples in a single argument.
 
+
+
 ## TODOs
-- re-implement stlcg (PyTorch) with the latest version of PyTorch.
+- manage reversing of signals internally for recurrent cases.
 
 
 ## Publications
