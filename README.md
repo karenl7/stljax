@@ -118,7 +118,9 @@ NOTE: Need to take care for formulas defined with Expressions and need multiple 
 
 
 ## Publications
-Here are a list of publications that use stlcg/stljax. Please file an issue, or pull request to add your publication to the list.
+Here is a list of publications that use stlcg/stljax. Please file an issue, or pull request to add your publication to the list.
+
+P. Kapoor, K. Mizuta, E. Kang, and K. Leung, "[STLCG++: A Masking Approach for Differentiable Signal Temporal Logic Specification](https://arxiv.org/abs/2501.04194)," ArXiv Preprint, 2025.
 
 K. Leung, and M. Pavone, "[Semi-Supervised Trajectory-Feedback Controller Synthesis for Signal Temporal Logic Specifications](https://arxiv.org/abs/2202.01997)," in American Control Conference, 2022.
 
@@ -128,7 +130,20 @@ J. DeCastro, K. Leung, N. Aréchiga, and M. Pavone, "[Interpretable Policies fro
 
 K. Leung, N. Arechiga, and M. Pavone, "[Backpropagation for Parametric STL](http://asl.stanford.edu/wp-content/papercite-data/pdf/Leung.Arechiga.ea.ULAD19.pdf)," in IEEE Intelligent Vehicles Symposium: Workshop on Unsupervised Learning for Automated Driving, Paris, France, 2019.
 
-When citing stlcg/stljax, please use the following Bibtex:
+
+## Citing stljax
+When citing stljax, or stlcg++ (masking approach), please use the following citation
+
+```
+@article{KapoorMizutaEtAl2025,
+  author = {Kapoor, P. and Mizuta, K. and Kang, E. and Leung, K.},
+  journal = {{{Available at }\url{https://arxiv.org/abs/2501.04194}}},
+  title = {{STLCG++}: A Masking Approach for Differentiable Signal Temporal Logic Specification},
+  year = {2022}
+}
+```
+
+When citing stlcg (recurrent approach), please use the following citations:
 ```
 # journal paper
 @Article{LeungArechigaEtAl2020,
