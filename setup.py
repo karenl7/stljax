@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name="stljax",
-    version="1.1.0",
+    version="1.1.1",
     description="stlcg with jax",
     author="Karen Leung",
     author_email="kymleung@uw.edu",
