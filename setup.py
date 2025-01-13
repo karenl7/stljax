@@ -9,7 +9,6 @@ setup(
     packages=["stljax"],
     install_requires=[
         "jax",
-        "matplotlib",
         "numpy",
         "graphviz"
     ],
