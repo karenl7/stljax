@@ -1,6 +1,8 @@
 stljax
 ======
 
+[![Paper](http://img.shields.io/badge/arXiv-2207.00669-B31B1B.svg)](https://arxiv.org/abs/2501.04194)
+
 A toolbox to compute the robustness of STL formulas using computation graphs. This is the jax version of the [STLCG toolbox originally implemented in PyTorch](https://github.com/StanfordASL/stlcg/tree/dev).
 
 
@@ -10,19 +12,11 @@ Requires Python 3.10+
 
 Install the repo:
 
-```
-pip install git+https://github.com/UW-CTRL/stljax.git
-```
+```pip install stljax```
 
-Alternatively, if you like to install the package in editable mode,
+Alternatively, if you want to develop on the code base, please fork this repo and make pull requests as needed.
 
-```
-git clone https://github.com/UW-CTRL/stljax.git
-cd stljax
-pip install -e .
-```
-(Best to use a virtual environment.)
-
+```pip install -e . ```
 
 ## Usage
 `demo.ipynb` is an IPython jupyter notebook that showcases the basic functionality of the toolbox:
