@@ -26,7 +26,7 @@ Alternatively, if you want to develop on the code base, please fork this repo an
 
 
 ## (New) Features
-stljax leverages to benefits of jax and automatic differentiation!
+`stljax` leverages to benefits of jax and automatic differentiation!
 
 Aside from using jax as the backend, stljax is more recent and tidier implementation of stlcg which was originally implemented in PyTorch back ~2019.
 
@@ -109,12 +109,13 @@ NOTE: Need to take care for formulas defined with Expressions and need multiple 
 
 ## TODOs
 - manage reversing of signals internally for recurrent cases.
+- add more smooth max/min approximation options
 
 
 ## Publications
 Here is a list of publications that use stlcg/stljax. Please file an issue, or pull request to add your publication to the list.
 
-P. Kapoor, K. Mizuta, E. Kang, and K. Leung, "[STLCG++: A Masking Approach for Differentiable Signal Temporal Logic Specification](https://arxiv.org/abs/2501.04194)," ArXiv Preprint, 2025.
+P. Kapoor, K. Mizuta, E. Kang, and K. Leung, "[STLCG++: A Masking Approach for Differentiable Signal Temporal Logic Specification](https://arxiv.org/abs/2501.04194),"IEEE Robotics and Automation Letters (accepted), 2025.
 
 K. Leung, and M. Pavone, "[Semi-Supervised Trajectory-Feedback Controller Synthesis for Signal Temporal Logic Specifications](https://arxiv.org/abs/2202.01997)," in American Control Conference, 2022.
 
@@ -129,11 +130,11 @@ K. Leung, N. Arechiga, and M. Pavone, "[Backpropagation for Parametric STL](http
 When citing stljax, or stlcg++ (masking approach), please use the following citation
 
 ```
-@article{KapoorMizutaEtAl2025,
+@Inproceedings{KapoorMizutaEtAl2025,
   author = {Kapoor, P. and Mizuta, K. and Kang, E. and Leung, K.},
-  journal = {{{Available at }\url{https://arxiv.org/abs/2501.04194}}},
+  booktitle = {{IEEE Robotics and Automation Letters (accepted)}}},
   title = {{STLCG++}: A Masking Approach for Differentiable Signal Temporal Logic Specification},
-  year = {2022}
+  year = {2025}
 }
 ```
 
