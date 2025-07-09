@@ -41,7 +41,7 @@ def make_stl_graph(form, node_attr=dict(style='filled',
     def tensor_to_str(tensor):
         device = tensor.device.type
         req_grad = tensor.requires_grad
-        if req_grad == False:
+        if not req_grad:
             return "input"
         tensor = tensor.detach()
         if device == "cuda":
