@@ -37,8 +37,9 @@ Aside from using jax as the backend, stljax is more recent and tidier implementa
 
 | Tags  🏷️  | Description |
 | --------- | ----------- |
-| v.1.1.0   | General code improvements. Included recurrent implementation and example notebooks. |
-| v.1.0.0   | Removed awkward expected signal dimension & leverage vmap for batched inputs. Masking for temporal operations & remove need to reverse signals. |
+| v1.1.2    | Minor changes, tidying code. Tidied example notebooks. | 
+| v1.1.0   | General code improvements. Included recurrent implementation and example notebooks. |
+| v1.0.0   | Removed awkward expected signal dimension & leverage vmap for batched inputs. Masking for temporal operations & remove need to reverse signals. |
 | v0.0.0    | A transfer from the 2019 PyTorch implementation to Jax + some tidying + adding Predicates + reversing signal automatically. |
 
 ## Quick intro
@@ -51,7 +52,7 @@ There are two ways to define an STL formula. Using either the `Expression` and `
 With `Expression`, you are essentially defining a signal whose values are the output of a predicate function computed external to the STL robustness computation formula.
 Essentially, you process your desired signal first (e.g., from a state trajectory, you compute velocity), and then you pass it directly into the STL formula.
 
-A step-by-step break down:
+A step-by-step breakdown:
 1. Suppose you have a `trajectory` that is an array of size `[time_steps, state_dim]`
 
 2. Suppose we have a `get_velocity()`  function and a `get_acceleration()` function:\
