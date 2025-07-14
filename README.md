@@ -19,7 +19,7 @@ Alternatively, if you want to develop on the code base, please fork this repo an
 ```pip install -e . ```
 
 ## Usage
-`demo.ipynb` is an IPython jupyter notebook that showcases the basic functionality of the toolbox:
+`examples/demo.ipynb` is an IPython jupyter notebook that showcases the basic functionality of the toolbox:
 * Setting up signals for the formulas, including the use of Expressions and Predicates
 * Defining STL formulas and visualizing them
 * Evaluating STL robustness, and robustness trace
