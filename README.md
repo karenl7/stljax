@@ -37,7 +37,7 @@ Aside from using jax as the backend, stljax is more recent and tidier implementa
 
 | Tags  🏷️  | Description |
 | --------- | ----------- |
-| v1.1.2    | Minor changes, tidying code. Tidied example notebooks. | 
+| v1.1.3    | Minor changes, tidying code. Tidied example notebooks. |
 | v1.1.0   | General code improvements. Included recurrent implementation and example notebooks. |
 | v1.0.0   | Removed awkward expected signal dimension & leverage vmap for batched inputs. Masking for temporal operations & remove need to reverse signals. |
 | v0.0.0    | A transfer from the 2019 PyTorch implementation to Jax + some tidying + adding Predicates + reversing signal automatically. |
